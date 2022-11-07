@@ -10,7 +10,7 @@ const getHomes = (req, res) => {
 };
 
 const createHome = (req, res) => {
-  console.log('reqBody:', req.body)
+
   const home = new House({
     title: req.body.title,
     description: req.body.description,
@@ -37,10 +37,8 @@ const createHome = (req, res) => {
 
   home.save((err, home) => {
     if (err) {
-      console.log('error:', err)
       res.send(err);
     }
-    console.log('home:', home)
     res.json(home);
   });
 };
@@ -65,10 +63,10 @@ const updateHome = (req, res) => {
         },
       },
       { new: true },
-      (err, Todo) => {
+      (err, House) => {
         if (err) {
           res.send(err);
-        } else res.json(Todo);
+        } else res.json(House);
       }
     );
   };
@@ -79,13 +77,15 @@ const updateHome = (req, res) => {
       .catch((err) => res.send(err));
   };
 
-const getHome = (req, res) => {
-    House.findById({_id: req.params.id}).then((err, home) => {
-        if(err){
-            res.send(err)
-        }
-        res.json(home)
-    })
+const getHome = async (req, res) => {
+  try{
+    const home = await House.findById({_id: req.params.id})
+     return res.json(home)
+  }
+  catch(err){
+    console.log(err)
+  }
+   
 }
 module.exports = {
   getHomes,

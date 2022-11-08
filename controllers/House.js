@@ -1,4 +1,5 @@
 const House = require("../Model/house");
+const SearchHouse = require("../Model/searchHouse")
 
 const getHomes = (req, res) => {
   House.find((err, homes) => {
@@ -86,7 +87,7 @@ const getHome = async (req, res) => {
 };
 const getFileteredHome = async (req, res) => {
   try {
-    const home = await House.find({
+    const home = await SearchHouse.find({
       $and: [
         req.query.city ? { city: req.query.city } : {},
         req.query.house_id ? { house_id: req.query.house_id } : {},

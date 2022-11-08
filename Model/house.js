@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 
 const HouseSchema = new mongoose.Schema({
+  _id: {
+    type: String
+  },
   city: {
     type: String,
   },

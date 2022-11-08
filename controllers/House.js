@@ -1,5 +1,5 @@
 const House = require("../Model/house");
-const SearchHouse = require("../Model/searchHouse")
+
 
 const getHomes = (req, res) => {
   House.find((err, homes) => {
@@ -7,7 +7,7 @@ const getHomes = (req, res) => {
       res.send(err);
     }
     res.json(homes);
-  });
+  }).sort({ createdAt: -1 });
 };
 
 const createHome = (req, res) => {
@@ -87,7 +87,7 @@ const getHome = async (req, res) => {
 };
 const getFileteredHome = async (req, res) => {
   try {
-    const home = await SearchHouse.find({
+    const home = await House.find({
       $and: [
         req.query.city ? { city: req.query.city } : {},
         req.query.house_id ? { house_id: req.query.house_id } : {},
@@ -101,7 +101,7 @@ const getFileteredHome = async (req, res) => {
           : {},
           req.query.district ? { district: req.query.district } : {},
       ],
-    });
+    }).sort({ createdAt: -1 });
     return res.json(home);
   } catch (err) {
     console.log(err);

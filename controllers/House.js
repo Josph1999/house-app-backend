@@ -19,7 +19,7 @@ const createHome = (req, res) => {
     type: req.body.type,
     agent: req.body.agent,
     city: req.body.city,
-    district: req.body.disrtict,
+    district: req.body.district,
     price: req.body.price,
     rooms: req.body.rooms,
     house_id: req.body.house_id,

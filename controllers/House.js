@@ -109,7 +109,7 @@ const getFileteredHome = async (req, res) => {
 };
 const getLastAddedHome = async (req, res) => {
   try {
-    const home = await House.find().sort({ createdAt: -1 });
+    const home = await House.find().sort({ createdAt: -1 }).limit(4);
     return res.json(home);
   } catch (err) {
     console.log(err);

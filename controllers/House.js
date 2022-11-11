@@ -29,7 +29,7 @@ const createHome = (req, res) => {
     floor_quantity: req.body.floor_quantity,
     furniture: req.body.furniture,
     type: req.body.type,
-    builiding_type: req.body.builiding_type,
+    building_type: req.body.building_type,
     technic: req.body.technic,
     balcony: req.body.balcony,
     contact_number: req.body.contact_number,

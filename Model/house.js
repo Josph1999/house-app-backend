@@ -55,7 +55,7 @@ const HouseSchema = new mongoose.Schema({
   balcony: {
     type: String,
   },
-  builiding_type: {
+  building_type: {
     type: String,
   },
   contact_number: {

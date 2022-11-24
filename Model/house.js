@@ -5,13 +5,16 @@ const HouseSchema = new mongoose.Schema({
     type: String
   },
   city: {
-    type: String,
+    type: Object,
   },
   title: {
     type: String
   },
+  title_eng: {
+    type: String
+  },
   district: {
-    type: String,
+    type: Object,
   },
   size: {
     type: Number,
@@ -25,7 +28,13 @@ const HouseSchema = new mongoose.Schema({
   description: {
     type: String,
   },
+  description_eng: {
+    type: String,
+  },
   adress: {
+    type: String,
+  },
+  adress_eng: {
     type: String,
   },
   photos: {
@@ -43,13 +52,43 @@ const HouseSchema = new mongoose.Schema({
   agent: {
     type: String,
   },
-  type: {
+  agent_eng: {
     type: String,
   },
-  condition: {
-    type: String,
+  type: {
+    type: Object,
+  },
+  status: {
+    type: Object,
+  },
+  remont: {
+    type: Object,
+  },
+  home_type: {
+   type: Object,
   },
   furniture: {
+    type: String,
+  },
+  parking: {
+    type: String,
+  },
+  heating: {
+    type: String,
+  },
+  fireplace: {
+    type: String,
+  },
+  elevator: {
+    type: String,
+  },
+  freight_elevator: {
+    type: String,
+  },
+  hot_water: {
+    type: String,
+  },
+  internet: {
     type: String,
   },
   technic: {

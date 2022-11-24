@@ -1,38 +1,48 @@
 const House = require("../Model/house");
 
 const getHomes = (req, res) => {
-    House.find((err, homes) => {
-        if (err) {
-          res.send(err);
-        }
-        res.json(homes);
-      });
+  House.find((err, homes) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json(homes);
+  });
 };
 
 const createHome = (req, res) => {
-
   const home = new House({
-    title: req.body.title,
-    description: req.body.description,
-    size: req.body.size,
-    adress: req.body.adress,
-    type: req.body.type,
-    agent: req.body.agent,
     city: req.body.city,
-    district: req.body.disrtict,
+    district: req.body.district,
+    size: req.body.size,
     price: req.body.price,
-    rooms: req.body.rooms,
     house_id: req.body.house_id,
+    description: req.body.description,
+    description_eng: req.body.description_eng,
+    adress: req.body.adress,
+    adress_eng: req.body.adress_eng,
     photos: req.body.photos,
-    condition: req.body.condition,
-    floor: req.body.floor,
+    rooms: req.body.rooms,
     floor_quantity: req.body.floor_quantity,
-    furniture: req.body.furniture,
+    floor: req.body.floor,
+    agent: req.body.agent,
+    agent_eng: req.body.agent_eng,
     type: req.body.type,
-    builiding_type: req.body.builiding_type,
+    status: req.body.status,
+    remont: req.body.remont,
+    home_type: req.body.home_type,
+    furniture: req.body.furniture,
     technic: req.body.technic,
     balcony: req.body.balcony,
-    contact_number: req.body.contact_number
+    title: req.body.title,
+    title_eng: req.body.title_eng,
+    contact_number: req.body.contact_number,
+    parking: req.body.parking,
+    hot_water: req.body.hot_water,
+    heating: req.body.heating,
+    fireplace: req.body.fireplace,
+    elevator: req.body.elevator,
+    freight_elevator: req.body.freight_elevator,
+    internet: req.body.internet,
   });
 
   home.save((err, home) => {
@@ -44,53 +54,113 @@ const createHome = (req, res) => {
 };
 
 const updateHome = (req, res) => {
-    House.findOneAndUpdate(
-      { _id: req.params.id },
-      {
-        $set: {
-            title: req.body.title,
-            description: req.body.description,
-            size: req.body.size,
-            adress: req.body.adress,
-            type: req.body.type,
-            agent: req.body.agent,
-            city: req.body.city,
-            photos: req.body.photos,
-            district: req.body.disrtict,
-            price: req.body.price,
-            rooms: req.body.rooms,
-            house_id: req.body.house_id
-        },
+  House.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        city: req.body.city,
+        district: req.body.district,
+        size: req.body.size,
+        price: req.body.price,
+        house_id: req.body.house_id,
+        description: req.body.description,
+        description_eng: req.body.description_eng,
+        adress: req.body.adress,
+        adress_eng: req.body.adress_eng,
+        photos: req.body.photos,
+        rooms: req.body.rooms,
+        floor_quantity: req.body.floor_quantity,
+        floor: req.body.floor,
+        agent: req.body.agent,
+        agent_eng: req.body.agent_eng,
+        type: req.body.type,
+        status: req.body.status,
+        remont: req.body.remont,
+        home_type: req.body.home_type,
+        furniture: req.body.furniture,
+        technic: req.body.technic,
+        balcony: req.body.balcony,
+        title: req.body.title,
+        title_eng: req.body.title_eng,
+        contact_number: req.body.contact_number,
+        parking: req.body.parking,
+        hot_water: req.body.hot_water,
+        heating: req.body.heating,
+        fireplace: req.body.fireplace,
+        elevator: req.body.elevator,
+        freight_elevator: req.body.freight_elevator,
+        internet: req.body.internet,
       },
-      { new: true },
-      (err, House) => {
-        if (err) {
-          res.send(err);
-        } else res.json(House);
-      }
-    );
-  };
+    },
+    { new: true },
+    (err, House) => {
+      if (err) {
+        res.send(err);
+      } else res.json(House);
+    }
+  );
+};
 
-  const deleteHome = (req, res) => {
-    House.deleteOne({ _id: req.params.id })
-      .then(() => res.json({ message: "House Deleted" }))
-      .catch((err) => res.send(err));
-  };
+const deleteHome = (req, res) => {
+  House.deleteOne({ _id: req.params.id })
+    .then(() => res.json({ message: "House Deleted" }))
+    .catch((err) => res.send(err));
+};
 
 const getHome = async (req, res) => {
-  try{
-    const home = await House.findById({_id: req.params.id})
-     return res.json(home)
+  try {
+    const home = await House.findById({ _id: req.params.id });
+    return res.json(home);
+  } catch (err) {
+    console.log(err);
   }
-  catch(err){
-    console.log(err)
+};
+const getFileteredHome = async (req, res) => {
+  try {
+    const home = await House.find({
+      $and: [
+        req.query.city ? { city: req.query.city } : {},
+        req.query.house_id ? { house_id: req.query.house_id } : {},
+        req.query.price_from && req.query.price_to
+          ? {
+              $and: [
+                { price: { $gt: req.query.price_from } },
+                { price: { $lt: req.query.price_to } },
+              ],
+            }
+          : {},
+        req.query.district ? { district: req.query.district } : {},
+        req.query.price_from && !req.query.price_to
+          ? {
+              $and: [{ price: { $gt: req.query.price_from } }],
+            }
+          : {},
+        !req.query.price_from && req.query.price_to
+          ? {
+              $and: [{ price: { $lt: req.query.price_to } }],
+            }
+          : {},
+      ],
+    });
+    return res.json(home);
+  } catch (err) {
+    console.log(err);
   }
-   
-}
+};
+const getLastAddedHome = async (req, res) => {
+  try {
+    const home = await House.find().sort({ createdAt: -1 });
+    return res.json(home);
+  } catch (err) {
+    console.log(err);
+  }
+};
 module.exports = {
   getHomes,
   createHome,
   updateHome,
   deleteHome,
-  getHome
+  getHome,
+  getFileteredHome,
+  getLastAddedHome,
 };

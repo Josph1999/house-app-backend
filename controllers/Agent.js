@@ -3,7 +3,7 @@ const Agent = require("../Model/user");
 
 const createAgent = (req, res) => {
     const agent = new Agent({
-      name: req.body.city,
+      name: req.body.name,
       name_eng: req.body.name_eng,
       constact_number: req.body.constact_number,
       photo_url: req.body.photo_url
@@ -28,7 +28,7 @@ const createAgent = (req, res) => {
 
   const deleteAgent = (req, res) => {
     Agent.deleteOne({ _id: req.params.id })
-      .then(() => res.json({ message: "House Deleted" }))
+      .then(() => res.json({ message: "Agent Deleted" }))
       .catch((err) => res.send(err));
   };
 

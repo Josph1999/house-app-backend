@@ -112,39 +112,44 @@ const getHome = async (req, res) => {
     const home = await House.findById({ _id: req.params.id });
     return res.json(home);
   } catch (err) {
-    console.log(err);
+    res.status(404).send({message: 'Not Found!'})
   }
 };
 const getFileteredHome = async (req, res) => {
   try {
     const home = await House.find({
       $and: [
-        req.query.city ? { city: req.query.city } : {},
+        req.query.city_eng ? { "city.name_en": { $eq: req.query.city_eng } } : {},
+        req.query.city_ka ? { "city.name_ka": { $eq: req.query.city_ka } } : {},
+        req.query.district_eng ? { "district.name_en": { $eq: req.query.district_eng } } : {},
+        req.query.district_ka ? { "district.name_ka": { $eq: req.query.district_ka } } : {},
+        req.query.type_eng ? { "type.name_en": { $eq: req.query.type_eng } } : {},
+        req.query.type_ka ? { "type.name_ka": { $eq: req.query.type_ka } } : {},
         req.query.house_id ? { house_id: req.query.house_id } : {},
         req.query.price_from && req.query.price_to
           ? {
               $and: [
-                { price: { $gt: req.query.price_from } },
-                { price: { $lt: req.query.price_to } },
+                { price: { $gte: req.query.price_from } },
+                { price: { $lte: req.query.price_to } },
               ],
             }
           : {},
         req.query.district ? { district: req.query.district } : {},
         req.query.price_from && !req.query.price_to
           ? {
-              $and: [{ price: { $gt: req.query.price_from } }],
+              $and: [{ price: { $gte: req.query.price_from } }],
             }
           : {},
         !req.query.price_from && req.query.price_to
           ? {
-              $and: [{ price: { $lt: req.query.price_to } }],
+              $and: [{ price: { $lte: req.query.price_to } }],
             }
           : {},
       ],
     });
     return res.json(home);
   } catch (err) {
-    console.log(err);
+    res.status(404).send({message: 'Not Found!'})
   }
 };
 const getLastAddedHome = async (req, res) => {
@@ -152,7 +157,7 @@ const getLastAddedHome = async (req, res) => {
     const home = await House.find().sort({ createdAt: -1 });
     return res.json(home);
   } catch (err) {
-    console.log(err);
+    res.status(404).send({message: 'Not Found!'})
   }
 };
 module.exports = {

@@ -1,12 +1,20 @@
 const House = require("../Model/house");
 
-const getHomes = (req, res) => {
-  House.find((err, homes) => {
-    if (err) {
-      res.send(err);
-    }
-    res.json(homes);
-  });
+const getHomes = async (req, res) => {
+  try {
+    const PAGE_SIZE = 1;
+    const page = parseInt(req.query.page || "1");
+    const total = await House.countDocuments({});
+    const pages = Math.ceil(total / PAGE_SIZE);
+    const homes = await House.find({})
+      .limit(PAGE_SIZE)
+      .skip(PAGE_SIZE * page)
+      .sort({ createdAt: -1 });
+
+    return res.json({ total, homes, pages });
+  } catch (err) {
+    res.status(500).send({ message: "Something went wrkon on server!" });
+  }
 };
 
 const createHome = (req, res) => {
@@ -112,18 +120,30 @@ const getHome = async (req, res) => {
     const home = await House.findById({ _id: req.params.id });
     return res.json(home);
   } catch (err) {
-    res.status(404).send({message: 'Not Found!'})
+    res.status(404).send({ message: "Not Found!" });
   }
 };
 const getFileteredHome = async (req, res) => {
   try {
+    const PAGE_SIZE = 1;
+    const page = parseInt(req.query.page || "1");
+    const total = await House.countDocuments({});
+
     const home = await House.find({
       $and: [
-        req.query.city_eng ? { "city.name_en": { $eq: req.query.city_eng } } : {},
+        req.query.city_eng
+          ? { "city.name_en": { $eq: req.query.city_eng } }
+          : {},
         req.query.city_ka ? { "city.name_ka": { $eq: req.query.city_ka } } : {},
-        req.query.district_eng ? { "district.name_en": { $eq: req.query.district_eng } } : {},
-        req.query.district_ka ? { "district.name_ka": { $eq: req.query.district_ka } } : {},
-        req.query.type_eng ? { "type.name_en": { $eq: req.query.type_eng } } : {},
+        req.query.district_eng
+          ? { "district.name_en": { $eq: req.query.district_eng } }
+          : {},
+        req.query.district_ka
+          ? { "district.name_ka": { $eq: req.query.district_ka } }
+          : {},
+        req.query.type_eng
+          ? { "type.name_en": { $eq: req.query.type_eng } }
+          : {},
         req.query.type_ka ? { "type.name_ka": { $eq: req.query.type_ka } } : {},
         req.query.house_id ? { house_id: req.query.house_id } : {},
         req.query.price_from && req.query.price_to
@@ -146,10 +166,55 @@ const getFileteredHome = async (req, res) => {
             }
           : {},
       ],
-    });
-    return res.json(home);
+    })
+      .limit(PAGE_SIZE)
+      .skip(PAGE_SIZE * page)
+      .sort({ createdAt: -1 });
+    const homeCount = await House.find({
+      $and: [
+        req.query.city_eng
+          ? { "city.name_en": { $eq: req.query.city_eng } }
+          : {},
+        req.query.city_ka ? { "city.name_ka": { $eq: req.query.city_ka } } : {},
+        req.query.district_eng
+          ? { "district.name_en": { $eq: req.query.district_eng } }
+          : {},
+        req.query.district_ka
+          ? { "district.name_ka": { $eq: req.query.district_ka } }
+          : {},
+        req.query.type_eng
+          ? { "type.name_en": { $eq: req.query.type_eng } }
+          : {},
+        req.query.type_ka ? { "type.name_ka": { $eq: req.query.type_ka } } : {},
+        req.query.house_id ? { house_id: req.query.house_id } : {},
+        req.query.price_from && req.query.price_to
+          ? {
+              $and: [
+                { price: { $gte: req.query.price_from } },
+                { price: { $lte: req.query.price_to } },
+              ],
+            }
+          : {},
+        req.query.district ? { district: req.query.district } : {},
+        req.query.price_from && !req.query.price_to
+          ? {
+              $and: [{ price: { $gte: req.query.price_from } }],
+            }
+          : {},
+        !req.query.price_from && req.query.price_to
+          ? {
+              $and: [{ price: { $lte: req.query.price_to } }],
+            }
+          : {},
+      ],
+    }).countDocuments({});
+
+    const pages = Math.ceil(homeCount / PAGE_SIZE);
+
+    return res.json({ home, pages, total });
   } catch (err) {
-    res.status(404).send({message: 'Not Found!'})
+    console.log("error:", err);
+    res.status(404).send({ message: "Not Found!" });
   }
 };
 const getLastAddedHome = async (req, res) => {
@@ -157,7 +222,7 @@ const getLastAddedHome = async (req, res) => {
     const home = await House.find().sort({ createdAt: -1 });
     return res.json(home);
   } catch (err) {
-    res.status(404).send({message: 'Not Found!'})
+    res.status(404).send({ message: "Not Found!" });
   }
 };
 module.exports = {

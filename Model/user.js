@@ -11,7 +11,7 @@ const AgentSchema = new mongoose.Schema({
     type: Number
   },
   photo_url: {
-    type: String
+    type: Object
   },
   createdAt: {
     type: Date,

@@ -125,7 +125,7 @@ const getHome = async (req, res) => {
 };
 const getFileteredHome = async (req, res) => {
   try {
-    const PAGE_SIZE = 1;
+    const PAGE_SIZE = 5;
     const page = parseInt(req.query.page || "1");
     const total = await House.countDocuments({});
 

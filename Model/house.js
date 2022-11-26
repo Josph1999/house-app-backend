@@ -124,10 +124,6 @@ const HouseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  contact_number: {
-    type: String,
-    required: true
-  },
   createdAt: {
     type: Date,
     default: Date.now,

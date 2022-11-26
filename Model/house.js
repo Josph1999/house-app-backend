@@ -61,11 +61,7 @@ const HouseSchema = new mongoose.Schema({
     required: true
   },
   agent: {
-    type: String,
-    required: true
-  },
-  agent_eng: {
-    type: String,
+    type: Object,
     required: true
   },
   type: {

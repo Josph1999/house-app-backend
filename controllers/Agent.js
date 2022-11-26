@@ -5,7 +5,7 @@ const createAgent = (req, res) => {
     const agent = new Agent({
       name: req.body.name,
       name_eng: req.body.name_eng,
-      constact_number: req.body.constact_number,
+      contact_number: req.body.contact_number,
       photo_url: req.body.photo_url
     });
   

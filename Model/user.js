@@ -3,15 +3,19 @@ const mongoose = require("mongoose");
 const AgentSchema = new mongoose.Schema({
   name: {
     type: String,
+    required: true
   },
   name_eng: {
-    type: String
+    type: String,
+    required: true
   },
-  constact_number: {
-    type: Number
+  contact_number: {
+    type: Number,
+    required: true
   },
   photo_url: {
-    type: Object
+    type: Object,
+    required: true
   },
   createdAt: {
     type: Date,

@@ -120,8 +120,8 @@ const HouseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  builiding_type: {
-    type: String,
+  type: {
+    type: Object,
     required: true
   },
   createdAt: {

@@ -107,6 +107,23 @@ const updateHome = (req, res) => {
   );
 };
 
+const deletePhoto = (req, res) => {
+  House.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        photos: req.body,
+      },
+    },
+    { new: true },
+    (err, House) => {
+      if (err) {
+        res.send(err);
+      } else res.json(House);
+    }
+  );
+};
+
 const deleteHome = (req, res) => {
   House.deleteOne({ _id: req.params.id })
     .then(() => res.json({ message: "House Deleted" }))
@@ -211,7 +228,6 @@ const getFileteredHome = async (req, res) => {
 
     return res.json({ home, pages, total });
   } catch (err) {
-    console.log("error:", err);
     res.status(404).send({ message: "Not Found!" });
   }
 };
@@ -231,4 +247,5 @@ module.exports = {
   getHome,
   getFileteredHome,
   getLastAddedHome,
+  deletePhoto,
 };

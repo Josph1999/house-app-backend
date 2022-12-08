@@ -17,6 +17,15 @@ const getHomes = async (req, res) => {
   }
 };
 
+const getHome = async (req, res) => {
+  try {
+    const home = await House.findById({ _id: req.params.id });
+    return res.json(home);
+  } catch (err) {
+    res.status(404).send({ message: "Not Found!" });
+  }
+};
+
 const createHome = (req, res) => {
   const home = new House({
     city: req.body.city,
@@ -124,20 +133,23 @@ const deletePhoto = (req, res) => {
   );
 };
 
+const updateSeenTimes = async (req, res) => {
+  try {
+    const home = await House.findById({ _id: req.params.id });
+    home.seen_times +=1
+
+    await home.save()
+  } catch (err) {
+   return res.send(err);
+  }
+};
+
 const deleteHome = (req, res) => {
   House.deleteOne({ _id: req.params.id })
     .then(() => res.json({ message: "House Deleted" }))
     .catch((err) => res.send(err));
 };
 
-const getHome = async (req, res) => {
-  try {
-    const home = await House.findById({ _id: req.params.id });
-    return res.json(home);
-  } catch (err) {
-    res.status(404).send({ message: "Not Found!" });
-  }
-};
 const getFileteredHome = async (req, res) => {
   try {
     const PAGE_SIZE = 4;
@@ -248,4 +260,5 @@ module.exports = {
   getFileteredHome,
   getLastAddedHome,
   deletePhoto,
+  updateSeenTimes,
 };

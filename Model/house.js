@@ -128,6 +128,10 @@ const HouseSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  seen_times: {
+    type: Number,
+    default: 0
+  }
 });
 
 module.exports = mongoose.model("House", HouseSchema);

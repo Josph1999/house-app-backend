@@ -9,11 +9,12 @@ const {
   getFileteredHome,
   getLastAddedHome,
   deletePhoto,
+  updateSeenTimes
 } = require("./controllers/House");
 const { checkIfAuthenticated } = require("./firebase-service/auth");
 
 router.get("/", (req, res) => {
-  res.send("Wlcome To LisaHelping!");
+  res.send("Welcome To LisaHelping!");
 });
 
 router.get("/homes", getHomes);
@@ -22,6 +23,7 @@ router.patch("/delete-photo/:id", checkIfAuthenticated, deletePhoto);
 router.put("/homes/:id", checkIfAuthenticated, updateHome);
 router.delete("/homes/:id", checkIfAuthenticated, deleteHome);
 router.get("/homes/:id", getHome);
+router.patch("/update-seen-times/:id", updateSeenTimes);
 router.get("/filter", getFileteredHome);
 router.get("/filter_last_added", getLastAddedHome);
 router.get("/agents", checkIfAuthenticated, getAgents);
